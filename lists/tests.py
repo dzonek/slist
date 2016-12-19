@@ -5,9 +5,6 @@ from lists.views import home_page
 
 from django.http import HttpResponse
 
-def home_page(request):
-    return HttpResponse('<html><title>Listy rzeczy do zrobienia</title></html>')
-
 class HomePageTest(TestCase):
     def test_root_url_resolves_to_home_page_view(self):
         found = resolve('/')

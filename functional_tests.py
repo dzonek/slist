@@ -16,7 +16,7 @@ class NewVisitorTest(unittest.TestCase):
         #Zwrocila uwage, ze tytul strony i naglowek zawieraja slowo Listy
         self.assertIn('Listy', self.browser.title)
         header_text=self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('Listy',header_text)
+        self.assertIn('listy',header_text)#cos jest zle w ksiazce-duza/mala litera i odmiana Lista/Listy
 
         #Od razu zostaje zachecona aby wpisac rzecz do zrobienia
         inputbox=self.browser.find_element_by_id('id_new_item')
@@ -29,9 +29,9 @@ class NewVisitorTest(unittest.TestCase):
         #"1:Kupic pawie piora" jako element listy rzeczy do zrobienia
         inputbox.send_keys(Keys.ENTER)
 
-        table = self.browser.find_elements_by_id('id_list_table')
-        rows = table.find_element_by_tag_name('tr')
-        self.assertTrue(any(row.text == '1:Kupic pawie piora' for row in rows))
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertTrue(any(row.text == '1:Kupic pawie piora' for row in rows),"Nowy element nie znajduje sie w tabeli")
 
         #Na stronie nadal znajduje sie pole tekstowe zachecajace do podania kolejnej rzeczy do zrobienia
         #Edyta wpisala "Uzyc pawich pior do zrobienia przynety" (Edyta jest niezwykle skrupulatna)

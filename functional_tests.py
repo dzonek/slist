@@ -24,14 +24,23 @@ class NewVisitorTest(unittest.TestCase):
 
         #W polu tekstowym wpisala "Kupic pawie piora (hobby Edyty polega na tworzeniu ozdobnych przynet)
         inputbox.send_keys('Kupic pawie piora')
-
+        inputbox.send_keys(Keys.ENTER)
+       
+        inputbox=self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Uzyc pawich pior do zrobienia przynety')
+        inputbox.send_keys(Keys.ENTER)
+ 
         #Po nacisnieciu Enter strona zostala zaktualizowana i wyswietla
         #"1:Kupic pawie piora" jako element listy rzeczy do zrobienia
-        inputbox.send_keys(Keys.ENTER)
+        #inputbox.send_keys(Keys.ENTER)
+        
+        import time
+        time.sleep(10)
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(any(row.text == '1:Kupic pawie piora' for row in rows),"Nowy element nie znajduje sie w tabeli")
+        self.assertIn('1:Kupic pawie piora',[row.text for row in rows],"Nowy element nie znajduje sie w tabeli--jego tekst to:\n%s"%(table.text,))
+        self.assertIn('2:Uzyc pawich pior do zrobienia przynety',[row.text for row in rows],"Nowy element nie znajduje sie w tabeli--jego tekst to:\n%s"%(table.text,))
 
         #Na stronie nadal znajduje sie pole tekstowe zachecajace do podania kolejnej rzeczy do zrobienia
         #Edyta wpisala "Uzyc pawich pior do zrobienia przynety" (Edyta jest niezwykle skrupulatna)

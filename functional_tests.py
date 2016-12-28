@@ -7,6 +7,12 @@ class NewVisitorTest(unittest.TestCase):
         self.browser=webdriver.Firefox()
     def tearDown(self):
         self.browser.quit()
+    def check_for_row_in_list_table(self,row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+
+        self.assertIn(row_text,[row.text for row in rows],"Nowy element nie znajduje sie w tabeli--jego tekst to:\n%s"%(row_text,))
+        
     def test_can_start_a_list_and_retrieve_it_later(self):
         #Edyta dowiedziala sie o nowej aplikacji "lista rzeczy do zrobienia"
         #Postanowila wiec przejsc na strone glowna aplikacji
@@ -25,7 +31,8 @@ class NewVisitorTest(unittest.TestCase):
         #W polu tekstowym wpisala "Kupic pawie piora (hobby Edyty polega na tworzeniu ozdobnych przynet)
         inputbox.send_keys('Kupic pawie piora')
         inputbox.send_keys(Keys.ENTER)
-       
+        self.check_for_row_in_list_table('1:Kupic pawie piora')
+
         inputbox=self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Uzyc pawich pior do zrobienia przynety')
         inputbox.send_keys(Keys.ENTER)
@@ -37,10 +44,11 @@ class NewVisitorTest(unittest.TestCase):
         import time
         time.sleep(10)
 
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1:Kupic pawie piora',[row.text for row in rows],"Nowy element nie znajduje sie w tabeli--jego tekst to:\n%s"%(table.text,))
-        self.assertIn('2:Uzyc pawich pior do zrobienia przynety',[row.text for row in rows],"Nowy element nie znajduje sie w tabeli--jego tekst to:\n%s"%(table.text,))
+       # table = self.browser.find_element_by_id('id_list_table')
+        #rows = table.find_elements_by_tag_name('tr')
+        self.check_for_row_in_list_table('1:Kupic pawie piora')
+        self.check_for_row_in_list_table('2:Uzyc pawich pior do zrobienia przynety')
+
 
         #Na stronie nadal znajduje sie pole tekstowe zachecajace do podania kolejnej rzeczy do zrobienia
         #Edyta wpisala "Uzyc pawich pior do zrobienia przynety" (Edyta jest niezwykle skrupulatna)

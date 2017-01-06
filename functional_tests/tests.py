@@ -22,7 +22,7 @@ class NewVisitorTest(LiveServerTestCase):
         #Zwrocila uwage, ze tytul strony i naglowek zawieraja slowo Listy
         self.assertIn('Listy', self.browser.title)
         header_text=self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('listy',header_text)#cos jest zle w ksiazce-duza/mala litera i odmiana Lista/Listy
+        self.assertIn('liste',header_text)#cos jest zle w ksiazce-duza/mala litera i odmiana Lista/Listy
 
         #Od razu zostaje zachecona aby wpisac rzecz do zrobienia
         inputbox=self.browser.find_element_by_id('id_new_item')
@@ -52,7 +52,6 @@ class NewVisitorTest(LiveServerTestCase):
         #Na stronie nadal znajduje sie pole tekstowe zachecajace do podania kolejnej rzeczy do zrobienia
         #Edyta wpisala "Uzyc pawich pior do zrobienia przynety" (Edyta jest niezwykle skrupulatna)
 
-        self.fail('Zakonczenie testu!')
 
 
         
@@ -85,9 +84,10 @@ class NewVisitorTest(LiveServerTestCase):
         #Ponownie nie ma slady po liscie Edyty
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Kupic pawie piora',page_text)
-        self.assertNoitIn('Kupic mleko',page_text)
+        self.assertIn('Kupic mleko',page_text)
 
         #Usatysfakcjonowani klada sie spac
+        self.fail('Zakonczenie testu!')
 
 #if __name__=='__main__':
 #    unittest.main()#warnings='ignore')

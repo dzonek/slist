@@ -31,6 +31,8 @@ class NewVisitorTest(LiveServerTestCase):
         #W polu tekstowym wpisala "Kupic pawie piora (hobby Edyty polega na tworzeniu ozdobnych przynet)
         inputbox.send_keys('Kupic pawie piora')
         inputbox.send_keys(Keys.ENTER)
+        edith_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url,'/lists/.+')
         self.check_for_row_in_list_table('1:Kupic pawie piora')
 
         inputbox=self.browser.find_element_by_id('id_new_item')
@@ -46,9 +48,6 @@ class NewVisitorTest(LiveServerTestCase):
 
        # table = self.browser.find_element_by_id('id_list_table')
         #rows = table.find_elements_by_tag_name('tr')
-        self.check_for_row_in_list_table('1:Kupic pawie piora')
-        self.check_for_row_in_list_table('2:Uzyc pawich pior do zrobienia przynety')
-
 
         #Na stronie nadal znajduje sie pole tekstowe zachecajace do podania kolejnej rzeczy do zrobienia
         #Edyta wpisala "Uzyc pawich pior do zrobienia przynety" (Edyta jest niezwykle skrupulatna)
@@ -58,13 +57,37 @@ class NewVisitorTest(LiveServerTestCase):
 
         
         #Strona zostala ponownie uaktualniona i teraz wyswietla dwa elementy na liscie rzeczy do zrobienia
+        self.check_for_row_in_list_table('1:Kupic pawie piora')
+        self.check_for_row_in_list_table('2:Uzyc pawich pior do zrobienia przynety')
 
-        #Edyta byla ciekawa czy witryna zapamieta jej liste. Zwrocila uwage na wygenerowany dla niej unikatowy adres URL, obok ktorego znajduje sie pewien tekst 
-        #z wyjasnieniem
+        #Teraz nowy uzytkownik Franek zaczyna korzystac  z witryny
 
-        #Przechodzi pod podany adres URL i widzi wyswietlona swoja liste rzeczy do zrobienia
+        ##Uzywamy nowej sesji przegladarki internetowej aby miec pewnosc ze zadne informacje dotyczace Edyty nie zostana ujawnione np przez cookies
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
 
-        #Usatysfakcjonowana kladzie sie spac
+        #Nie znajduje zadnych sladow Edyty
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Kupic pawie piora', page_text)
+        self.assertNotIn('zrobienia przynety',page_text)
+
+        #Franek tworzy nowa liste wprowadzajac nowy element. Jego lista jest mniej interesujaca niz lista Edyty
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Kupic mleko')
+        inputbox.send_keys(Keys.ENTER)
+
+        #Franek otrzymuje unikatowy URL prowadzacy do listy
+        francis_list_url = self.browser.current_url
+        self.assertRegex(francis_list_url,'/lists/.+')
+        self.assertNotEqual(francis_list_url, edith_list_url)
+
+        #Ponownie nie ma slady po liscie Edyty
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Kupic pawie piora',page_text)
+        self.assertNoitIn('Kupic mleko',page_text)
+
+        #Usatysfakcjonowani klada sie spac
 
 #if __name__=='__main__':
 #    unittest.main()#warnings='ignore')

@@ -1,8 +1,8 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import unittest
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser=webdriver.Firefox()
     def tearDown(self):
@@ -16,7 +16,7 @@ class NewVisitorTest(unittest.TestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         #Edyta dowiedziala sie o nowej aplikacji "lista rzeczy do zrobienia"
         #Postanowila wiec przejsc na strone glowna aplikacji
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)#'http://localhost:8000')
         self.browser.implicitly_wait(3)
         
         #Zwrocila uwage, ze tytul strony i naglowek zawieraja slowo Listy
@@ -66,5 +66,5 @@ class NewVisitorTest(unittest.TestCase):
 
         #Usatysfakcjonowana kladzie sie spac
 
-if __name__=='__main__':
-    unittest.main()#warnings='ignore')
+#if __name__=='__main__':
+#    unittest.main()#warnings='ignore')

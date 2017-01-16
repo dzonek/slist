@@ -1,8 +1,24 @@
+import sys
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 class NewVisitorTest(StaticLiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        for arg in sys.argv:
+            if 'liveserver' in arg:
+                cls.server_url = 'http://' + arg.split('=')[1]
+                return
+            super().setUpClass()
+            cls.server_url = cls.live_server_url
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.server_url == cls.live_server_url:
+            super().tearDownClass()
+    
     def setUp(self):
         self.browser=webdriver.Firefox()
     def tearDown(self):
@@ -16,7 +32,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         #Edyta dowiedziala sie o nowej aplikacji "lista rzeczy do zrobienia"
         #Postanowila wiec przejsc na strone glowna aplikacji
-        self.browser.get(self.live_server_url)#'http://localhost:8000')
+        self.browser.get(self.server_url)#'http://localhost:8000')
         self.browser.implicitly_wait(3)
         
         #Zwrocila uwage, ze tytul strony i naglowek zawieraja slowo Listy
@@ -66,7 +82,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.browser = webdriver.Firefox()
 
         #Nie znajduje zadnych sladow Edyty
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Kupic pawie piora', page_text)
         self.assertNotIn('zrobienia przynety',page_text)
@@ -91,7 +107,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
     def test_layout_and_styling(self):
         #Edyta przeszla na strone glowna
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         self.browser.set_window_size(1024,768)
 
         #Zauwazyla, ze pole tekstowe zostalo elegancko wysrodkowane

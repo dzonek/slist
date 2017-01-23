@@ -121,6 +121,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-#ENV_PATH = os.path.abspath(os.path.dirname(__file__)) #to niepotrzebne
+ENV_PATH = os.path.abspath(os.path.dirname(__file__)) #to niepotrzebne
 
-STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR,'../public/static_superlists'))
+STATIC_ROOT = os.path.abspath(os.path.join(ENV_PATH,'../public/static'))

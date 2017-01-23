@@ -25,7 +25,7 @@ SECRET_KEY = 'fa1q-!!asz)$wgs#mj5u5xi+y9ux_k=9(c5odf!moolt@m#9*9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['slist-staging.dzonek.usermd.net']
 
 
 # Application definition
